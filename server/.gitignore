@@ -1,0 +1,4 @@
+*.pyc
+*.db3
+server/logs/*.log
+server/conf/secret_settings.py
