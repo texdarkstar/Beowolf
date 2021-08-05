@@ -46,6 +46,9 @@ class SystemRoom(WildernessRoom):
         x, y = self.coordinates
         name = "Deep Space"
 
+        if self.db.token:
+            name = self.db.token.get_uwp()
+
         if self.locks.check_lockstring(looker, "perm(Builder)"):
             # looker.msg("|gelevation (%f)|n" % elevation)
             # looker.msg("|bmoisture (%f)|n" % moisture)

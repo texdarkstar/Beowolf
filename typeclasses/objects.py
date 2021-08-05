@@ -11,7 +11,7 @@ inheritance.
 
 """
 from evennia import DefaultObject
-from world.uwp import uwp
+from world import uwp
 
 import random
 
@@ -199,32 +199,28 @@ class Object(DefaultObject):
 
 
 class RoomTokenObject(Object):
+    def get_uwp(self):
+        return self.db.attrs["mainworld"]
+
     def at_object_creation(self):
+        self.locks.add("get:false()")
+        self.locks.add("view:false()")
+
         self.db.attrs = {
-            "primary": "",
             "mainworld": "",
+            "gas giant": False,
         }
 
-        roll = random.randint(1, 1000)
 
-        if roll <= 138: # solo barren
-            primary = generate_primary("barren")
+        roll = random.randint(1, 2)
+        if roll == 1:  # nothing here
+            self.db.attrs["gas giant"] = False
+            self.db.attrs["mainworld"] = "Deep Space"
+            return
 
-        elif roll <= 150: # solo barren anomaly
-            primary = generate_primary("barren")
-
-        elif roll <= 465: # solo planets
-            primary = generate_primary("main")
-            mainworld = uwp.get_uwp()
-
-        elif roll <= 500: # solo planets anomaly
-            primary = generate_primary("main")
-
-        elif roll == 1000: 
-            pass
-
-        self.db.attrs["primary"] = primary
-        self.db.attrs["mainworld"] = uwp
+        mainworld = uwp.get_uwp()
+        self.db.attrs["mainworld"] = mainworld
+        self.db.attrs["gas giant"] = True if random.randint(0, 1) else False
 
         # self.db.attrs
 

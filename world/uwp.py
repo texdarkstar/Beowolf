@@ -88,7 +88,7 @@ def get_uwp():
         tech_level = 0
 
     _uwp = [starport, size, atmosphere, hydrosphere, population, government, law_level, tech_level]
-    uwp = list()
+    u = list()
     for i in _uwp:
         n = i
         if n == 10:
@@ -111,6 +111,8 @@ def get_uwp():
             n = "I"
         elif n == 19:
             n = "J"
-        uwp.append(n)
 
-    return uwp
+
+        u.append(str(n))
+
+    return "".join(u)

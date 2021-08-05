@@ -5,7 +5,6 @@ from evennia import settings, create_object
 from evennia.utils import inherits_from
 from evennia.contrib.wilderness import *
 
-
 class MapProvider(WildernessMapProvider):
     room_typeclass = SystemRoom
 
@@ -33,10 +32,13 @@ class MapProvider(WildernessMapProvider):
         x, y = room.coordinates
         token = None
 
-        if room.db.token:
-            # get room token and change room based off of info stored on db.token.db attrs
+        token = room.search("roomtoken", typeclass=RoomTokenObject)
+
+        if not token:
+            token = create_object(RoomTokenObject, location=room, key="roomtoken_(%d, %d)" % (x, y))
+        else:
             pass
 
-        else:
-            token = create_object(RoomTokenObject)
-            # create token and generate room; store on token and store ref to db.tokens
+        room.db.token = token
+            
+
